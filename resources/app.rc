@@ -1,0 +1,32 @@
+#include <windows.h>
+
+// Application icon (slot 1, referenced by mainwindow.cpp via MAKEINTRESOURCEW(1))
+1 ICON "app.ico"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
+ FILEFLAGSMASK 0x3fL
+ FILEFLAGS 0x0L
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "Independent Forensic Tooling"
+            VALUE "FileDescription", "Dedup Explorer - Windows Data Deduplication forensic recovery utility"
+            VALUE "FileVersion", "1.0.0.0"
+            VALUE "InternalName", "DedupExplorer"
+            VALUE "OriginalFilename", "DedupExplorer.exe"
+            VALUE "ProductName", "Dedup Explorer"
+            VALUE "ProductVersion", "1.0.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
