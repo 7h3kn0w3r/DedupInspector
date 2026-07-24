@@ -71,3 +71,5 @@ For a deep technical explanation of how Windows Data Deduplication works, includ
 
 This article explains the concepts behind **DedupInspector** and the forensic techniques used by the tool.
 
+
+# Dataset Disclaimer: The observed inconsistencies are caused by the provided test data, not by the tool. A large portion of the dataset contains fabricated or non-real files, which may lead to unexpected behavior during analysis. However, some samples are legitimate real files, including xiaomi.jpg and other valid artifacts.
