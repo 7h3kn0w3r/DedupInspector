@@ -63,63 +63,11 @@ DedupExplorer/
     app.rc, app.manifest   version info + Common Controls v6 manifest
 ```
 
-## ⚠️ On format accuracy (read before trusting recovered output)
+## 📖 Learn More
 
-Windows Data Deduplication's on-disk structures — the `IO_REPARSE_TAG_DEDUP`
-reparse point payload, the `Stream_*` container internals, and `CKHR`
-("Chunk Hash Record") layout — are **not publicly documented by
-Microsoft**. Everything this tool assumes about those formats comes from
-community DFIR reverse-engineering and may drift across Windows Server
-versions/dedup job format revisions.
+For a deep technical explanation of how Windows Data Deduplication works, including its internal structures, metadata, reparse points, ChunkStore, and reverse engineering details, read the accompanying research article:
 
-To keep this tractable, every version-sensitive assumption is isolated in
-one place so you can correct it quickly against your own samples:
+➡️ **https://7h3kn0w3r.github.io/blog/windows-data-deduplication/#how-data-deduplication-work**
 
-- `reparse_parser.h` — `kOffset*` constants for original size / stream
-  header id / chunk store GUID inside the reparse payload.
-- `stream_parser.cpp` — `StreamEntryHeader` layout for locating a file's
-  CKHR blob inside a `Stream_*` file.
-- `ckhr_parser.h` — `CKHR` fixed-field layout (container index, offset,
-  lengths, compression flag, SHA-256 hash).
-- `chunk_parser.cpp` — container file extension matched (`*.ccc`) and the
-  `COMPRESS_ALGORITHM_XPRESS_HUFF` id passed to the Windows Compression
-  API (`compressapi.h`) for chunk decompression; swap in
-  `COMPRESS_ALGORITHM_XPRESS` or `COMPRESS_ALGORITHM_MSZIP` if a hex dump
-  of your samples shows a different scheme.
+This article explains the concepts behind **DedupInspector** and the forensic techniques used by the tool.
 
-**Recommended validation workflow:** take one small, known test file on a
-lab volume with dedup enabled, run a dedup optimization job on it, then
-hex-dump its reparse point (`fsutil reparsepoint query`, or read the
-`$REPARSE_POINT` attribute directly from a raw MFT export) and the
-relevant `Stream_*` / `.ccc` files to confirm/adjust the offsets above
-before relying on recovered output for casework.
-
-## Recovery behavior
-
-- Chunks that can't be located/read are zero-filled in the output so file
-  length and the offsets of successfully recovered chunks stay correct —
-  this keeps partial recoveries forensically useful rather than corrupt.
-- `Recover All` groups files by chunk store GUID and re-indexes chunk
-  containers per group, so a scan spanning multiple dedup jobs/volumes
-  still resolves each file against the right container set.
-- Output paths mirror the original directory structure (as reconstructed
-  from MFT parent-record chains) under your chosen output folder.
-
-## UI
-
-Single fixed window, no tabs/ribbon/docking, matching the brief:
-
-```
-[MFT File]     [Browse]
-[Dedup Folder] [Browse]
-[        Scan        ]
-+--------------------------------------------------+
-| Filename | Original Size | Chunks | Recovery      |
-+--------------------------------------------------+
-Selected File: ...
-Original Size: ...   Chunk Count: ...
-Chunk Store GUID: ...   Stream Header: ...
-Recovery Status: ...
-[Recover Selected]  [Recover All]
-[==== progress ====]
-```
