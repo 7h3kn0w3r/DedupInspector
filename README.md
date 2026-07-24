@@ -1,14 +1,18 @@
-# Dedup Explorer
+# DedupInspector
 
-A lightweight, portable, offline forensic utility for recovering files from
-Windows Data Deduplication volumes, given:
+A lightweight, portable, offline forensic utility for recovering files from Windows Data Deduplication volumes.
 
-- An exported `$MFT`
-- The volume's `System Volume Information\Dedup` folder (or its
-  `ChunkStore` subfolder directly)
+The tool reconstructs deduplicated files using:
 
-No Qt, .NET, Java, Electron, Node, or MFC — pure C++17 + Win32 + STL,
-built with CMake into a single native `DedupExplorer.exe`.
+* An exported NTFS `$MFT`
+* A Deduplication **Stream** (`.ccc`) file
+* A Deduplication **Chunk** (`.ccc`) file
+
+No installation or Windows Data Deduplication service is required.
+
+Built as a native Windows application using modern **C++17**, the Win32 API, and the C++ Standard Library with **CMake**, producing a single standalone executable (`DedupInspector.exe`).
+
+**No Qt, .NET, Java, Electron, Node.js, or MFC.**
 
 ## Build
 
